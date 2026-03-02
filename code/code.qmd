@@ -13,8 +13,8 @@ library(here)
 library(janitor)
 library(readxl)
 
-salinity <- "salinity-pickleweed.csv"
-Kyra_data <- "personal_data.csv"
+salinity <- read.csv(here("data","salinity-pickleweed.csv"))
+Kyra_data <- read.csv(here("data","personal_data.csv"))
 
 ```
 
@@ -22,4 +22,21 @@ Kyra_data <- "personal_data.csv"
 
 ### a. 
 
-I could do a linear regression test or a Pearson's correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (predictor and response) by estimating how biomass changes with salinity (uses slope and intercept).
+I could do a linear regression test or a Pearson's correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (1 predictor and 1 response) by estimating how biomass changes with salinity (uses slope and intercept).
+
+### b. 
+
+```{r}
+ggplot(salinity, aes(x = salinity_mS_cm, y = pickleweed)) +
+  geom_point(color = "darkorange") +
+  geom_smooth(method = "lm", se = TRUE, color = "steelblue") +
+  labs(
+    x = "Soil salinity (mS/cm)",
+    y = "Pickleweed biomass (g)",
+    title = "Relationship between soil salinity and pickleweed biomass"
+  ) +
+  theme_minimal()
+
+```
+
+### c. 

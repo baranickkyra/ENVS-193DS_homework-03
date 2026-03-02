@@ -1,0 +1,25 @@
+---
+title: "code.qmd"
+author: "Kyra Baranick"
+format: html
+editor: visual
+---
+
+[My GitHub Repository](baranickkyra/ENVS-193DS_homework-03: Homework Three for ENVS193DS)
+
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+library(readxl)
+
+salinity <- "salinity-pickleweed.csv"
+Kyra_data <- "personal_data.csv"
+
+```
+
+# Problem 1
+
+### a. 
+
+I could do a linear regression test or a Pearson's correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (predictor and response) by estimating how biomass changes with salinity (uses slope and intercept).

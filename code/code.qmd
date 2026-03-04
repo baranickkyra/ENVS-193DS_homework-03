@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-[My GitHub Repository](baranickkyra/ENVS-193DS_homework-03: Homework Three for ENVS193DS)
+[My GitHub Repository](baranickkyra/ENVS-193DS_homework-03:%20Homework%20Three%20for%20ENVS193DS)
 
 ```{r}
 library(tidyverse)
@@ -20,11 +20,11 @@ Kyra_data <- read.csv(here("data","personal_data.csv"))
 
 # Problem 1
 
-### a. 
+### a.
 
 I could do a linear regression test or a Pearson's correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (1 predictor and 1 response) by estimating how biomass changes with salinity (uses slope and intercept).
 
-### b. 
+### b.
 
 ```{r}
 ggplot(salinity, aes(x = salinity_mS_cm, y = pickleweed)) +
@@ -39,4 +39,67 @@ ggplot(salinity, aes(x = salinity_mS_cm, y = pickleweed)) +
 
 ```
 
-### c. 
+### c.
+
+# Problem 2
+
+### a.
+
+```{r}
+ggplot(Kyra_data, # making a ggplot using the data from Proj1
+       aes(x = Weekend.or.Weekday,   # using weekend or weekday as the categorical xaxis
+           y = Pickups, # using pickups data for the y axis
+           fill = Weekend.or.Weekday)) + # filling with different colors for weekendand weekday
+  geom_boxplot(alpha = 0.2) + # adjusting the transparency
+  geom_jitter(width = 0.2, # giving the points a slight horizontal jitter
+              height = 0, # NO vertical jitter
+              alpha = 0.8, # making points semi-transparent for readability
+              shape = 21) + # picking a different shape
+  labs(
+    title = "Phone Pickup Count: Weekends vs Weekdays", # creating the title ofthe graph
+    subtitle = "Most recent observation: February 18, 2026",
+    x = "Day Type", # labeling the x axis
+    y = "Pickup Count" # labeling the y axis
+  ) +
+  scale_fill_manual(values = c( # filling with colors otherthen the default
+    "weekday" = "red",
+    "weekend" = "purple"
+  )) +
+  
+  theme_classic() + # changed the theme form the default
+  guides(fill = "none") # removing the legend
+
+```
+
+```{r}
+ggplot(Kyra_data, # creating a plot using ggplot 
+       aes(x = `min.of.sleep.the.night.before`, # using min of sleep as the x axis 
+           y = Pickups)) + # using pickups as the y-axis
+  
+  geom_point(color = "#1B9E77",   # nondefault green 
+             size = 3 # adjusting the size for visibilty 
+             ) + #
+  
+  geom_smooth(method = "lm",
+              se = TRUE,           # shows confidence band
+              color = "#D95F02",   # non-default orange
+              linewidth = 1.2) +   # widening the line just to do soem extra messing around with the visual
+  
+  labs(
+    title = "Phone Pickups vs. Minutes of Sleep", # adding a title
+    subtitle = "Most recent observation: February 18, 2026", # putting my most recent obs as the subtitle 
+    x = "Minutes of sleep the night before (min)", # labeling my x-axis
+    y = "Phone pickup count (number of pickups)"    # labeling my y-axis
+  ) +
+
+  theme_classic() + # changing the theme form the gghplot default 
+
+  theme(
+    panel.grid = element_blank(),        # removes all gridlines
+    panel.background = element_blank(),  # removes grey panel background
+    plot.background = element_blank(),   # removes outer plot background
+    axis.line = element_line(color = "black"),  # keeps clean black axis lines
+    axis.ticks = element_line(color = "black")  # keeps ticks visible and clean
+  )
+
+```

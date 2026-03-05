@@ -103,3 +103,11 @@ ggplot(Kyra_data, # creating a plot using ggplot
   )
 
 ```
+
+### b. 
+
+FIGURE 1: The x-axis (Day Type) shows whether the day is a weekday or weekend, and the y-axis (Pickup Count) shows the number of phone pickups. The red box represents weekdays and the purple box represents weekends. Dots show individual daily observations, pink being weekdays and purple for weekends. The black line inside each box is the median, the box edges show the interquartile range (middle 50% of values), and the vertical lines (whiskers) show the range of non-outlier values. The subtitle indicates the most recent observation date (February 18, 2026).
+
+FIGURE 2 : The x-axis (Minutes of sleep the night before) shows sleep duration in minutes, and the y-axis (Phone pickup count) shows the number of daily phone pickups. Green dots represent individual daily observations. The red line shows the fitted linear trend between sleep and phone pickups, and the gray shaded band represents the confidence interval around the trend line. The subtitle indicates the most recent observation date (February 18, 2026).
+
+### c. 

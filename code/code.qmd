@@ -8,6 +8,8 @@ editor: visual
 [My GitHub Repository](baranickkyra/ENVS-193DS_homework-03:%20Homework%20Three%20for%20ENVS193DS)
 
 ```{r}
+#| message: false
+#| warning: false
 library(tidyverse)
 library(here)
 library(janitor)
@@ -27,6 +29,8 @@ I could do a linear regression test or a Pearson's correlation test. Pearson’s
 ### b.
 
 ```{r}
+#| message: false
+#| warning: false
 ggplot(salinity, aes(x = salinity_mS_cm, y = pickleweed)) +
   geom_point(color = "darkorange") +
   geom_smooth(method = "lm", se = TRUE, color = "steelblue") +

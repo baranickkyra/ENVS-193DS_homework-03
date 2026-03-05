@@ -108,10 +108,44 @@ ggplot(Kyra_data, # creating a plot using ggplot
 
 ```
 
-### b. 
+### b.
 
 FIGURE 1: The x-axis (Day Type) shows whether the day is a weekday or weekend, and the y-axis (Pickup Count) shows the number of phone pickups. The red box represents weekdays and the purple box represents weekends. Dots show individual daily observations, pink being weekdays and purple for weekends. The black line inside each box is the median, the box edges show the interquartile range (middle 50% of values), and the vertical lines (whiskers) show the range of non-outlier values. The subtitle indicates the most recent observation date (February 18, 2026).
 
 FIGURE 2 : The x-axis (Minutes of sleep the night before) shows sleep duration in minutes, and the y-axis (Phone pickup count) shows the number of daily phone pickups. Green dots represent individual daily observations. The red line shows the fitted linear trend between sleep and phone pickups, and the gray shaded band represents the confidence interval around the trend line. The subtitle indicates the most recent observation date (February 18, 2026).
 
+# Problem 3
+
+### a.
+
+My affective visualization will use a timeline of overlapping circles of cutout construction paper to represent my daily boredom levels and phone pickups. Each circle’s size will reflect my boredom on a scale of 1–5, with lower boredom shown as larger circles and higher boredom as smaller ones (starting at 1=1inch and moving down inches for each value 2-=0.8 inches, 3=.06 inches, 4 = .03 inches and 5 = .02 inches ). The circles will be colored along a heat gradient, shifting from cool blues for fewer phone pickups to warm reds for more frequent pickups. 100-125 will be blue then 125-150 will be white 150-175 will be yellow and 200+ will be red) As the circles overlap, they will create visually dense or chaotic areas that express how stressful or repetitive certain days felt.
+
+### b.
+
+### c.
+
+### d.
+
+My piece visualizes my daily boredom levels and phone pickups through a timeline of overlapping construction‑paper circles that vary in size and color. I was influenced by the climate‑change heat‑gradient graphic we studied in class, which showed how a simple shift in color can communicate intensity and emotion. I will also invite some chaos into my project with the overlapping circles indicating stressful time in this month. I will create this by cutting paper circles and making then equidistant apart allowing for some overlap when large 1 boredom rank circles appear right next to each other.
+
+### e.
+
+[My slides](Boredom%20Scale%20Vs%20Phone%20pickups%20-%20Presentation)
+
+# Problem 4
+
+### a.
+
+This test uses a Spearmans correlation test to analyze contamination of PFAs in groundwater in Hutuo China. The response variables are the individual PFAS concentrations measured in groundwater samples (PFOA, PFNA, PFHxA, etc). These are the outcomes being compared against each other in the correlation analysis. The predictor variable is the site (1-4) that the sample came from. We are also comparing the concentration of another PFAS compound in the same groundwater samples in the Spearmans correlation.
+
+### b. 
+
+The table presents the correlation results in a clear and straightforward grid, with PFAS compounds listed along both axes in a logical order. The authors include significance markers (\* and \*\*) that make it easy to identify which correlations are statistically meaningful at the .05 and .01 levels respectively. However, the table does not show any underlying data distributions or sample variability, so the reader cannot assess how strongly skewed or clustered the concentrations are.
+
 ### c. 
+
+The table has minimal decorative elements, resulting in a high data:ink ratio. The authors avoid bolding or color‑coding, which keeps the table clean but also makes it harder to quickly spot the strongest correlations without scanning each cell. The use of asterisks for significance is subtle and does not distract from the numerical values.
+
+### d. 
+
+To make the table easier to read, I would add light shading or simple color gradients to show which correlations are stronger or weaker. This would help readers quickly spot PFAS compounds that behave similarly. I would also add a short note with confidence intervals or sample size information so the reader understands how reliable each value is ( just form looking at the table not the whole study). Another option would be to include a correlation heatmap, with PFAS on both axes and color showing the strength of each correlation, which would make patterns much easier to see at a glance.

@@ -1,0 +1,117 @@
+---
+title: "code.qmd"
+author: "Kyra Baranick"
+format: html
+editor: visual
+---
+
+[My GitHub Repository](baranickkyra/ENVS-193DS_homework-03:%20Homework%20Three%20for%20ENVS193DS)
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(here)
+library(janitor)
+library(readxl)
+
+salinity <- read.csv(here("data","salinity-pickleweed.csv"))
+Kyra_data <- read.csv(here("data","personal_data.csv"))
+
+```
+
+# Problem 1
+
+### a.
+
+I could do a linear regression test or a Pearson's correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (1 predictor and 1 response) by estimating how biomass changes with salinity (uses slope and intercept).
+
+### b.
+
+```{r}
+#| message: false
+#| warning: false
+ggplot(salinity, aes(x = salinity_mS_cm, y = pickleweed)) +
+  geom_point(color = "darkorange") +
+  geom_smooth(method = "lm", se = TRUE, color = "steelblue") +
+  labs(
+    x = "Soil salinity (mS/cm)",
+    y = "Pickleweed biomass (g)",
+    title = "Relationship between soil salinity and pickleweed biomass"
+  ) +
+  theme_minimal()
+
+```
+
+### c.
+
+# Problem 2
+
+### a.
+
+```{r}
+ggplot(Kyra_data, # making a ggplot using the data from Proj1
+       aes(x = Weekend.or.Weekday,   # using weekend or weekday as the categorical xaxis
+           y = Pickups, # using pickups data for the y axis
+           fill = Weekend.or.Weekday)) + # filling with different colors for weekendand weekday
+  geom_boxplot(alpha = 0.2) + # adjusting the transparency
+  geom_jitter(width = 0.2, # giving the points a slight horizontal jitter
+              height = 0, # NO vertical jitter
+              alpha = 0.8, # making points semi-transparent for readability
+              shape = 21) + # picking a different shape
+  labs(
+    title = "Phone Pickup Count: Weekends vs Weekdays", # creating the title ofthe graph
+    subtitle = "Most recent observation: February 18, 2026",
+    x = "Day Type", # labeling the x axis
+    y = "Pickup Count" # labeling the y axis
+  ) +
+  scale_fill_manual(values = c( # filling with colors otherthen the default
+    "weekday" = "red",
+    "weekend" = "purple"
+  )) +
+  
+  theme_classic() + # changed the theme form the default
+  guides(fill = "none") # removing the legend
+
+```
+
+```{r}
+ggplot(Kyra_data, # creating a plot using ggplot 
+       aes(x = `min.of.sleep.the.night.before`, # using min of sleep as the x axis 
+           y = Pickups)) + # using pickups as the y-axis
+  
+  geom_point(color = "#1B9E77",   # nondefault green 
+             size = 3 # adjusting the size for visibilty 
+             ) + #
+  
+  geom_smooth(method = "lm",
+              se = TRUE,           # shows confidence band
+              color = "#D95F02",   # non-default orange
+              linewidth = 1.2) +   # widening the line just to do soem extra messing around with the visual
+  
+  labs(
+    title = "Phone Pickups vs. Minutes of Sleep", # adding a title
+    subtitle = "Most recent observation: February 18, 2026", # putting my most recent obs as the subtitle 
+    x = "Minutes of sleep the night before (min)", # labeling my x-axis
+    y = "Phone pickup count (number of pickups)"    # labeling my y-axis
+  ) +
+
+  theme_classic() + # changing the theme form the gghplot default 
+
+  theme(
+    panel.grid = element_blank(),        # removes all gridlines
+    panel.background = element_blank(),  # removes grey panel background
+    plot.background = element_blank(),   # removes outer plot background
+    axis.line = element_line(color = "black"),  # keeps clean black axis lines
+    axis.ticks = element_line(color = "black")  # keeps ticks visible and clean
+  )
+
+```
+
+### b. 
+
+FIGURE 1: The x-axis (Day Type) shows whether the day is a weekday or weekend, and the y-axis (Pickup Count) shows the number of phone pickups. The red box represents weekdays and the purple box represents weekends. Dots show individual daily observations, pink being weekdays and purple for weekends. The black line inside each box is the median, the box edges show the interquartile range (middle 50% of values), and the vertical lines (whiskers) show the range of non-outlier values. The subtitle indicates the most recent observation date (February 18, 2026).
+
+FIGURE 2 : The x-axis (Minutes of sleep the night before) shows sleep duration in minutes, and the y-axis (Phone pickup count) shows the number of daily phone pickups. Green dots represent individual daily observations. The red line shows the fitted linear trend between sleep and phone pickups, and the gray shaded band represents the confidence interval around the trend line. The subtitle indicates the most recent observation date (February 18, 2026).
+
+### c. 

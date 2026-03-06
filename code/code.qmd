@@ -5,7 +5,9 @@ format: html
 editor: visual
 ---
 
-[My GitHub Repository](baranickkyra/ENVS-193DS_homework-03:%20Homework%20Three%20for%20ENVS193DS)
+[My GitHub Repository](https://github.com/baranickkyra/ENVS-193DS_homework-03)
+
+https://baranickkyra.github.io/ENVS-193DS_homework-03/code/code.html
 
 ```{r}
 #| message: false
@@ -99,7 +101,7 @@ Scale Location Plot : This plot provided another view of homoscedasticity. The r
 
 Residuals vs Leverage : This plot helped identify influential points. No observations were far outside the Cook’s distance , and leverage values were moderate. This indicates that no single point was disproportionately influencing the linear relationship.
 
-Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and o extreme influential points. Overall the assumptions were met.
+Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and zero extreme influential points. Overall the assumptions were met.
 
 ### Running test
 
@@ -112,15 +114,15 @@ cor.test(
 
 ```
 
-### d. 
+### d.
 
 To evaluate the strength of the relationship between pickleweed biomass and soil salinity, I used a Pearsons correlation because both variables are continuous and my diagnostic plots indicated that the assumptions of linearity and approximate normality were reasonably met. There is a statistically significant moderately positive correlation between soil salinity and CA pickle weed biomass(g), meaning that biomass tends to increase as soil salinity increases. (Pearson's r = 0.53, t(21) = 2.90, p = .009, α = .05)
 
-### e. 
+### e.
 
 The analysis shows that pickleweed biomass increases as soil salinity increases, and this relationship is statistically reliable (r = 0.53, p = .009). This means areas of the slough with higher salinity are more likely to support stronger pickleweed growth. For planting decisions, we should prioritize high salinity zones if our goal is to maximize biomass.
 
-### f. 
+### f.
 
 ```{r}
 cor.test(
@@ -212,7 +214,11 @@ My affective visualization will use a timeline of overlapping circles of cutout 
 
 ### b.
 
+![](images/clipboard-2059503044.jpeg)
+
 ### c.
+
+![](images/clipboard-2121089056.jpeg)
 
 ### d.
 
@@ -220,7 +226,7 @@ My piece visualizes my daily boredom levels and phone pickups through a timeline
 
 ### e.
 
-[My slides](Boredom%20Scale%20Vs%20Phone%20pickups%20-%20Presentation)
+[My slides](https://www.canva.com/design/DAHDDJ39j6Y/3cjUokWinVR7a40nIoQywg/edit)
 
 # Problem 4
 

@@ -120,20 +120,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Problem 1</h1>
 <section id="a." class="level3">
 <h3 class="anchored" data-anchor-id="a.">a.</h3>
-<p>I could do a linear regression test or a Pearson’s correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (1 predictor and 1 response) by estimating how biomass changes with salinity (uses slope and intercept).</p>
+<p>Two appropriate tests for evaluating the strength of the relationship between soil salinity (mS/cm) and pickleweed biomass (g) are Pearsons correlation and spearmans rank correlation . Pearson’s correlation measures the strength of a linear relationship and assumes normality and equal variance, while Spearman’s correlation uses the ranked values and does not require normality, making it more appropriate for skewed or nonlinear patterns. Both treat salinity and biomass as continuous variables but differ in their assumptions and sensitivity to outliers.</p>
 </section>
 <section id="b." class="level3">
 <h3 class="anchored" data-anchor-id="b.">b.</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salinity, <span class="fu">aes</span>(<span class="at">x =</span> salinity_mS_cm, <span class="at">y =</span> pickleweed)) <span class="sc">+</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"darkorange"</span>) <span class="sc">+</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">TRUE</span>, <span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Soil salinity (mS/cm)"</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Pickleweed biomass (g)"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Relationship between soil salinity and pickleweed biomass"</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the linear model</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(pickleweed <span class="sc">~</span> salinity_mS_cm, <span class="at">data =</span> salinity)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe of fitted values + confidence intervals</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>pred_df <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  lm_fit,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">salinity_mS_cm =</span> salinity<span class="sc">$</span>salinity_mS_cm),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="st">"confidence"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">salinity_mS_cm =</span> salinity<span class="sc">$</span>salinity_mS_cm)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> salinity,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> salinity_mS_cm, <span class="at">y =</span> pickleweed),</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"darkgreen"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.7</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> pred_df,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> salinity_mS_cm, <span class="at">ymin =</span> lwr, <span class="at">ymax =</span> upr),</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"orange"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.25</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> pred_df,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> salinity_mS_cm, <span class="at">y =</span> fit),</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"orange"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">1.2</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Soil salinity (mS/cm)"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Pickleweed biomass (g)"</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Relationship between soil salinity and pickleweed biomass"</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -146,34 +179,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="c." class="level3">
 <h3 class="anchored" data-anchor-id="c.">c.</h3>
 </section>
-</section>
-<section id="problem-2" class="level1">
-<h1>Problem 2</h1>
-<section id="a.-1" class="level3">
-<h3 class="anchored" data-anchor-id="a.-1">a.</h3>
+<section id="checking-assuptions" class="level3">
+<h3 class="anchored" data-anchor-id="checking-assuptions">Checking Assuptions</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Kyra_data, <span class="co"># making a ggplot using the data from Proj1</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Weekend.or.Weekday,   <span class="co"># using weekend or weekday as the categorical xaxis</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Pickups, <span class="co"># using pickups data for the y axis</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> Weekend.or.Weekday)) <span class="sc">+</span> <span class="co"># filling with different colors for weekendand weekday</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="co"># adjusting the transparency</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="co"># giving the points a slight horizontal jitter</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> <span class="dv">0</span>, <span class="co"># NO vertical jitter</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="co"># making points semi-transparent for readability</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span> <span class="co"># picking a different shape</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Phone Pickup Count: Weekends vs Weekdays"</span>, <span class="co"># creating the title ofthe graph</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Most recent observation: February 18, 2026"</span>,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Day Type"</span>, <span class="co"># labeling the x axis</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Pickup Count"</span> <span class="co"># labeling the y axis</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>( <span class="co"># filling with colors otherthen the default</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekday"</span> <span class="ot">=</span> <span class="st">"red"</span>,</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekend"</span> <span class="ot">=</span> <span class="st">"purple"</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="co"># changed the theme form the default</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="co"># removing the legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the linear regression model</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(pickleweed <span class="sc">~</span> salinity_mS_cm, <span class="at">data =</span> salinity)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Produce the four diagnostic plots</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))   <span class="co"># optional: shows all 4 plots in one window</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -182,43 +196,139 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>Residuals vs Fitted : This plot helped evaluate linearity and constant variance. The points were scattered without a strong curve, and the spread of residuals stayed fairly even across fitted values. That pattern suggests the relationship between salinity and biomass is approximately linear and that variance is not dramatically increasing or decreasing.</p>
+<p>Normal QQ Plot : This plot checked normality of residuals. Most points fell close to the diagonal line, with only mild deviations at the tails. That pattern indicates that the residuals are reasonably close to normally distributed, which is sufficient for Pearson’s correlation.</p>
+<p>Scale Location Plot : This plot provided another view of homoscedasticity. The red line was about flat, and the spread of points around it did not show a funnel shape. That consistency supports the assumption of equal variance across levels of salinity.</p>
+<p>Residuals vs Leverage : This plot helped identify influential points. No observations were far outside the Cook’s distance , and leverage values were moderate. This indicates that no single point was disproportionately influencing the linear relationship.</p>
+<p>Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and o extreme influential points. Overall the assumptions were met.</p>
+</section>
+<section id="running-test" class="level3">
+<h3 class="anchored" data-anchor-id="running-test">Running test</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Kyra_data, <span class="co"># creating a plot using ggplot </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">min.of.sleep.the.night.before</span><span class="st">`</span>, <span class="co"># using min of sleep as the x axis </span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Pickups)) <span class="sc">+</span> <span class="co"># using pickups as the y-axis</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#1B9E77"</span>,   <span class="co"># nondefault green </span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span> <span class="co"># adjusting the size for visibilty </span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>             ) <span class="sc">+</span> <span class="co">#</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">TRUE</span>,           <span class="co"># shows confidence band</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"#D95F02"</span>,   <span class="co"># non-default orange</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span>   <span class="co"># widening the line just to do soem extra messing around with the visual</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Phone Pickups vs. Minutes of Sleep"</span>, <span class="co"># adding a title</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Most recent observation: February 18, 2026"</span>, <span class="co"># putting my most recent obs as the subtitle </span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Minutes of sleep the night before (min)"</span>, <span class="co"># labeling my x-axis</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Phone pickup count (number of pickups)"</span>    <span class="co"># labeling my y-axis</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="co"># changing the theme form the gghplot default </span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),        <span class="co"># removes all gridlines</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),  <span class="co"># removes grey panel background</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_blank</span>(),   <span class="co"># removes outer plot background</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>),  <span class="co"># keeps clean black axis lines</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>)  <span class="co"># keeps ticks visible and clean</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> salinity_mS_cm <span class="sc">+</span> pickleweed,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> salinity,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"pearson"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  salinity_mS_cm and pickleweed
+t = 2.8979, df = 21, p-value = 0.008605
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.1568265 0.7757682
+sample estimates:
+      cor 
+0.5344778 </code></pre>
+</div>
+</div>
+</section>
+<section id="d." class="level3">
+<h3 class="anchored" data-anchor-id="d.">d.&nbsp;</h3>
+<p>To evaluate the strength of the relationship between pickleweed biomass and soil salinity, I used a Pearsons correlation because both variables are continuous and my diagnostic plots indicated that the assumptions of linearity and approximate normality were reasonably met. There is a statistically significant moderately positive correlation between soil salinity and CA pickle weed biomass(g), meaning that biomass tends to increase as soil salinity increases. (Pearson’s r = 0.53, t(21) = 2.90, p = .009, α = .05)</p>
+</section>
+<section id="e." class="level3">
+<h3 class="anchored" data-anchor-id="e.">e.</h3>
+<p>The analysis shows that pickleweed biomass increases as soil salinity increases, and this relationship is statistically reliable (r = 0.53, p = .009). This means areas of the slough with higher salinity are more likely to support stronger pickleweed growth. For planting decisions, we should prioritize high salinity zones if our goal is to maximize biomass.</p>
+</section>
+<section id="f." class="level3">
+<h3 class="anchored" data-anchor-id="f.">f.&nbsp;</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> salinity_mS_cm <span class="sc">+</span> pickleweed,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> salinity,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"spearman"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  salinity_mS_cm and pickleweed
+S = 824, p-value = 0.003426
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.5928854 </code></pre>
+</div>
+</div>
+<p>There is a statistically significant moderately positive monotonic relationship between soil salinity and California pickleweed biomass (g), meaning that biomass tends to increase as salinity increases even when the data are ranked. (Spearman’s ρ = 0.59, S = 824, p = .003, α = .05)</p>
+<p>Pearson’s and Spearman’s correlations led to the same conclusion about the relationship between salinity and pickleweed biomass: both tests detected a positive and statistically significant association. Pearson measured the strength of the linear relationship (r = 0.53, p = .009), while Spearman measured the strength of the monotonic relationship, which is less sensitive to normality and outliers. Because both tests agreed, the interpretation remains the same meaning biomass increases as soil salinity increases</p>
+</section>
+</section>
+<section id="problem-2" class="level1">
+<h1>Problem 2</h1>
+<section id="a.-1" class="level3">
+<h3 class="anchored" data-anchor-id="a.-1">a.</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Kyra_data, <span class="co"># making a ggplot using the data from Proj1</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Weekend.or.Weekday,   <span class="co"># using weekend or weekday as the categorical xaxis</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Pickups, <span class="co"># using pickups data for the y axis</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> Weekend.or.Weekday)) <span class="sc">+</span> <span class="co"># filling with different colors for weekendand weekday</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="co"># adjusting the transparency</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="co"># giving the points a slight horizontal jitter</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">height =</span> <span class="dv">0</span>, <span class="co"># NO vertical jitter</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="co"># making points semi-transparent for readability</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span> <span class="co"># picking a different shape</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Phone Pickup Count: Weekends vs Weekdays"</span>, <span class="co"># creating the title ofthe graph</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Most recent observation: February 18, 2026"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Day Type"</span>, <span class="co"># labeling the x axis</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Pickup Count"</span> <span class="co"># labeling the y axis</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>( <span class="co"># filling with colors otherthen the default</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekday"</span> <span class="ot">=</span> <span class="st">"red"</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"weekend"</span> <span class="ot">=</span> <span class="st">"purple"</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="co"># changed the theme form the default</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="co"># removing the legend</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="code_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Kyra_data, <span class="co"># creating a plot using ggplot </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">min.of.sleep.the.night.before</span><span class="st">`</span>, <span class="co"># using min of sleep as the x axis </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Pickups)) <span class="sc">+</span> <span class="co"># using pickups as the y-axis</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#1B9E77"</span>,   <span class="co"># nondefault green </span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span> <span class="co"># adjusting the size for visibilty </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>             ) <span class="sc">+</span> <span class="co">#</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">TRUE</span>,           <span class="co"># shows confidence band</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"#D95F02"</span>,   <span class="co"># non-default orange</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span>   <span class="co"># widening the line just to do soem extra messing around with the visual</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Phone Pickups vs. Minutes of Sleep"</span>, <span class="co"># adding a title</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Most recent observation: February 18, 2026"</span>, <span class="co"># putting my most recent obs as the subtitle </span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Minutes of sleep the night before (min)"</span>, <span class="co"># labeling my x-axis</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Phone pickup count (number of pickups)"</span>    <span class="co"># labeling my y-axis</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="co"># changing the theme form the gghplot default </span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),        <span class="co"># removes all gridlines</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),  <span class="co"># removes grey panel background</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_blank</span>(),   <span class="co"># removes outer plot background</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>),  <span class="co"># keeps clean black axis lines</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"black"</span>)  <span class="co"># keeps ticks visible and clean</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="code_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="code_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -229,8 +339,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>FIGURE 1: The x-axis (Day Type) shows whether the day is a weekday or weekend, and the y-axis (Pickup Count) shows the number of phone pickups. The red box represents weekdays and the purple box represents weekends. Dots show individual daily observations, pink being weekdays and purple for weekends. The black line inside each box is the median, the box edges show the interquartile range (middle 50% of values), and the vertical lines (whiskers) show the range of non-outlier values. The subtitle indicates the most recent observation date (February 18, 2026).</p>
 <p>FIGURE 2 : The x-axis (Minutes of sleep the night before) shows sleep duration in minutes, and the y-axis (Phone pickup count) shows the number of daily phone pickups. Green dots represent individual daily observations. The red line shows the fitted linear trend between sleep and phone pickups, and the gray shaded band represents the confidence interval around the trend line. The subtitle indicates the most recent observation date (February 18, 2026).</p>
 </section>
+</section>
+<section id="problem-3" class="level1">
+<h1>Problem 3</h1>
+<section id="a.-2" class="level3">
+<h3 class="anchored" data-anchor-id="a.-2">a.</h3>
+<p>My affective visualization will use a timeline of overlapping circles of cutout construction paper to represent my daily boredom levels and phone pickups. Each circle’s size will reflect my boredom on a scale of 1–5, with lower boredom shown as larger circles and higher boredom as smaller ones (starting at 1=1inch and moving down inches for each value 2-=0.8 inches, 3=.06 inches, 4 = .03 inches and 5 = .02 inches ). The circles will be colored along a heat gradient, shifting from cool blues for fewer phone pickups to warm reds for more frequent pickups. 100-125 will be blue then 125-150 will be white 150-175 will be yellow and 200+ will be red) As the circles overlap, they will create visually dense or chaotic areas that express how stressful or repetitive certain days felt.</p>
+</section>
+<section id="b.-2" class="level3">
+<h3 class="anchored" data-anchor-id="b.-2">b.</h3>
+</section>
 <section id="c.-1" class="level3">
-<h3 class="anchored" data-anchor-id="c.-1">c.&nbsp;</h3>
+<h3 class="anchored" data-anchor-id="c.-1">c.</h3>
+</section>
+<section id="d.-1" class="level3">
+<h3 class="anchored" data-anchor-id="d.-1">d.</h3>
+<p>My piece visualizes my daily boredom levels and phone pickups through a timeline of overlapping construction‑paper circles that vary in size and color. I was influenced by the climate‑change heat‑gradient graphic we studied in class, which showed how a simple shift in color can communicate intensity and emotion. I will also invite some chaos into my project with the overlapping circles indicating stressful time in this month. I will create this by cutting paper circles and making then equidistant apart allowing for some overlap when large 1 boredom rank circles appear right next to each other.</p>
+</section>
+<section id="e.-1" class="level3">
+<h3 class="anchored" data-anchor-id="e.-1">e.</h3>
+<p><a href="Boredom%20Scale%20Vs%20Phone%20pickups%20-%20Presentation">My slides</a></p>
+</section>
+</section>
+<section id="problem-4" class="level1">
+<h1>Problem 4</h1>
+<section id="a.-3" class="level3">
+<h3 class="anchored" data-anchor-id="a.-3">a.</h3>
+<p>This test uses a Spearmans correlation test to analyze contamination of PFAs in groundwater in Hutuo China. The response variables are the individual PFAS concentrations measured in groundwater samples (PFOA, PFNA, PFHxA, etc). These are the outcomes being compared against each other in the correlation analysis. The predictor variable is the site (1-4) that the sample came from. We are also comparing the concentration of another PFAS compound in the same groundwater samples in the Spearmans correlation.</p>
+</section>
+<section id="b.-3" class="level3">
+<h3 class="anchored" data-anchor-id="b.-3">b.</h3>
+<p>The table presents the correlation results in a clear and straightforward grid, with PFAS compounds listed along both axes in a logical order. The authors include significance markers (* and **) that make it easy to identify which correlations are statistically meaningful at the .05 and .01 levels respectively. However, the table does not show any underlying data distributions or sample variability, so the reader cannot assess how strongly skewed or clustered the concentrations are.</p>
+</section>
+<section id="c.-2" class="level3">
+<h3 class="anchored" data-anchor-id="c.-2">c.</h3>
+<p>The table has minimal decorative elements, resulting in a high data:ink ratio. The authors avoid bolding or color coding, which keeps the table clean but also makes it harder to quickly spot the strongest correlations without scanning each cell. The use of asterisks for significance is subtle and does not distract from the numerical values.</p>
+</section>
+<section id="d.-2" class="level3">
+<h3 class="anchored" data-anchor-id="d.-2">d.</h3>
+<p>To make the table easier to read, I would add light shading or simple color gradients to show which correlations are stronger or weaker. This would help readers quickly spot PFAS compounds that behave similarly. I would also add a short note with confidence intervals or sample size information so the reader understands how reliable each value is ( just form looking at the table not the whole study). Another option would be to include a correlation heatmap, with PFAS on both axes and color showing the strength of each correlation, which would make patterns much easier to see at a glance.</p>
 </section>
 </section>
 

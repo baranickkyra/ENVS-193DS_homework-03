@@ -24,26 +24,116 @@ Kyra_data <- read.csv(here("data","personal_data.csv"))
 
 ### a.
 
-I could do a linear regression test or a Pearson's correlation test. Pearson’s correlation measures the stregeth and direction of a linear association between the two variables, while linear regression quantifies the relationship (1 predictor and 1 response) by estimating how biomass changes with salinity (uses slope and intercept).
+Two appropriate tests for evaluating the strength of the relationship between soil salinity (mS/cm) and pickleweed biomass (g) are Pearsons correlation and spearmans rank correlation . Pearson’s correlation measures the strength of a linear relationship and assumes normality and equal variance, while Spearman’s correlation uses the ranked values and does not require normality, making it more appropriate for skewed or nonlinear patterns. Both treat salinity and biomass as continuous variables but differ in their assumptions and sensitivity to outliers.
 
 ### b.
 
 ```{r}
-#| message: false
-#| warning: false
-ggplot(salinity, aes(x = salinity_mS_cm, y = pickleweed)) +
-  geom_point(color = "darkorange") +
-  geom_smooth(method = "lm", se = TRUE, color = "steelblue") +
+library(ggplot2)
+library(dplyr)
+
+# Fit the linear model
+lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)
+
+# Create dataframe of fitted values + confidence intervals
+pred_df <- predict(
+  lm_fit,
+  newdata = data.frame(salinity_mS_cm = salinity$salinity_mS_cm),
+  interval = "confidence"
+) %>%
+  as.data.frame() %>%
+  mutate(salinity_mS_cm = salinity$salinity_mS_cm)
+
+# Plot
+ggplot() +
+  geom_point(
+    data = salinity,
+    aes(x = salinity_mS_cm, y = pickleweed),
+    color = "darkgreen",
+    size = 3,
+    alpha = 0.7
+  ) +
+  geom_ribbon(
+    data = pred_df,
+    aes(x = salinity_mS_cm, ymin = lwr, ymax = upr),
+    fill = "orange",
+    alpha = 0.25
+  ) +
+  geom_line(
+    data = pred_df,
+    aes(x = salinity_mS_cm, y = fit),
+    color = "orange",
+    linewidth = 1.2
+  ) +
   labs(
     x = "Soil salinity (mS/cm)",
     y = "Pickleweed biomass (g)",
     title = "Relationship between soil salinity and pickleweed biomass"
   ) +
-  theme_minimal()
+  theme_classic()
+
+
+
 
 ```
 
 ### c.
+
+### Checking Assuptions
+
+```{r}
+# Fit the linear regression model
+lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)
+
+# Produce the four diagnostic plots
+par(mfrow = c(2, 2))   # optional: shows all 4 plots in one window
+plot(lm_fit)
+
+```
+
+Residuals vs Fitted : This plot helped evaluate linearity and constant variance. The points were scattered without a strong curve, and the spread of residuals stayed fairly even across fitted values. That pattern suggests the relationship between salinity and biomass is approximately linear and that variance is not dramatically increasing or decreasing.
+
+Normal QQ Plot : This plot checked normality of residuals. Most points fell close to the diagonal line, with only mild deviations at the tails. That pattern indicates that the residuals are reasonably close to normally distributed, which is sufficient for Pearson’s correlation.
+
+Scale Location Plot : This plot provided another view of homoscedasticity. The red line was about flat, and the spread of points around it did not show a funnel shape. That consistency supports the assumption of equal variance across levels of salinity.
+
+Residuals vs Leverage : This plot helped identify influential points. No observations were far outside the Cook’s distance , and leverage values were moderate. This indicates that no single point was disproportionately influencing the linear relationship.
+
+Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and o extreme influential points. Overall the assumptions were met.
+
+### Running test
+
+```{r}
+cor.test(
+  ~ salinity_mS_cm + pickleweed,
+  data = salinity,
+  method = "pearson"
+)
+
+```
+
+### d. 
+
+To evaluate the strength of the relationship between pickleweed biomass and soil salinity, I used a Pearsons correlation because both variables are continuous and my diagnostic plots indicated that the assumptions of linearity and approximate normality were reasonably met. There is a statistically significant moderately positive correlation between soil salinity and CA pickle weed biomass(g), meaning that biomass tends to increase as soil salinity increases. (Pearson's r = 0.53, t(21) = 2.90, p = .009, α = .05)
+
+### e. 
+
+The analysis shows that pickleweed biomass increases as soil salinity increases, and this relationship is statistically reliable (r = 0.53, p = .009). This means areas of the slough with higher salinity are more likely to support stronger pickleweed growth. For planting decisions, we should prioritize high salinity zones if our goal is to maximize biomass.
+
+### f. 
+
+```{r}
+cor.test(
+  ~ salinity_mS_cm + pickleweed,
+  data = salinity,
+  method = "spearman"
+)
+
+```
+
+There is a statistically significant moderately positive monotonic relationship between soil salinity and California pickleweed biomass (g), meaning that biomass tends to increase as salinity increases even when the data are ranked. (Spearman’s ρ = 0.59, S = 824, p = .003, α = .05)
+
+Pearson’s and Spearman’s correlations led to the same conclusion about the relationship between salinity and pickleweed biomass: both tests detected a positive and statistically significant association. Pearson measured the strength of the linear relationship (r = 0.53, p = .009), while Spearman measured the strength of the monotonic relationship, which is less sensitive to normality and outliers. Because both tests agreed, the interpretation remains the same meaning biomass increases as soil salinity increases
 
 # Problem 2
 
@@ -138,14 +228,14 @@ My piece visualizes my daily boredom levels and phone pickups through a timeline
 
 This test uses a Spearmans correlation test to analyze contamination of PFAs in groundwater in Hutuo China. The response variables are the individual PFAS concentrations measured in groundwater samples (PFOA, PFNA, PFHxA, etc). These are the outcomes being compared against each other in the correlation analysis. The predictor variable is the site (1-4) that the sample came from. We are also comparing the concentration of another PFAS compound in the same groundwater samples in the Spearmans correlation.
 
-### b. 
+### b.
 
 The table presents the correlation results in a clear and straightforward grid, with PFAS compounds listed along both axes in a logical order. The authors include significance markers (\* and \*\*) that make it easy to identify which correlations are statistically meaningful at the .05 and .01 levels respectively. However, the table does not show any underlying data distributions or sample variability, so the reader cannot assess how strongly skewed or clustered the concentrations are.
 
-### c. 
+### c.
 
-The table has minimal decorative elements, resulting in a high data:ink ratio. The authors avoid bolding or color‑coding, which keeps the table clean but also makes it harder to quickly spot the strongest correlations without scanning each cell. The use of asterisks for significance is subtle and does not distract from the numerical values.
+The table has minimal decorative elements, resulting in a high data:ink ratio. The authors avoid bolding or color coding, which keeps the table clean but also makes it harder to quickly spot the strongest correlations without scanning each cell. The use of asterisks for significance is subtle and does not distract from the numerical values.
 
-### d. 
+### d.
 
 To make the table easier to read, I would add light shading or simple color gradients to show which correlations are stronger or weaker. This would help readers quickly spot PFAS compounds that behave similarly. I would also add a short note with confidence intervals or sample size information so the reader understands how reliable each value is ( just form looking at the table not the whole study). Another option would be to include a correlation heatmap, with PFAS on both axes and color showing the strength of each correlation, which would make patterns much easier to see at a glance.

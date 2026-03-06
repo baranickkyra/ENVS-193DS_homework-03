@@ -101,7 +101,7 @@ Scale Location Plot : This plot provided another view of homoscedasticity. The r
 
 Residuals vs Leverage : This plot helped identify influential points. No observations were far outside the Cook’s distance , and leverage values were moderate. This indicates that no single point was disproportionately influencing the linear relationship.
 
-Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and zero extreme influential points. Overall the assumptions were met.
+Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals. Overall the assumptions were met.
 
 ### Running test
 

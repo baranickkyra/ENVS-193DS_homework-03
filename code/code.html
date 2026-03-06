@@ -106,7 +106,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><a href="baranickkyra/ENVS-193DS_homework-03:%20Homework%20Three%20for%20ENVS193DS">My GitHub Repository</a></p>
+<p><a href="https://github.com/baranickkyra/ENVS-193DS_homework-03">My GitHub Repository</a></p>
+<p>https://baranickkyra.github.io/ENVS-193DS_homework-03/code/code.html</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
@@ -200,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Normal QQ Plot : This plot checked normality of residuals. Most points fell close to the diagonal line, with only mild deviations at the tails. That pattern indicates that the residuals are reasonably close to normally distributed, which is sufficient for Pearson’s correlation.</p>
 <p>Scale Location Plot : This plot provided another view of homoscedasticity. The red line was about flat, and the spread of points around it did not show a funnel shape. That consistency supports the assumption of equal variance across levels of salinity.</p>
 <p>Residuals vs Leverage : This plot helped identify influential points. No observations were far outside the Cook’s distance , and leverage values were moderate. This indicates that no single point was disproportionately influencing the linear relationship.</p>
-<p>Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and o extreme influential points. Overall the assumptions were met.</p>
+<p>Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals, constant variance, and zero extreme influential points. Overall the assumptions were met.</p>
 </section>
 <section id="running-test" class="level3">
 <h3 class="anchored" data-anchor-id="running-test">Running test</h3>
@@ -226,7 +227,7 @@ sample estimates:
 </div>
 </section>
 <section id="d." class="level3">
-<h3 class="anchored" data-anchor-id="d.">d.&nbsp;</h3>
+<h3 class="anchored" data-anchor-id="d.">d.</h3>
 <p>To evaluate the strength of the relationship between pickleweed biomass and soil salinity, I used a Pearsons correlation because both variables are continuous and my diagnostic plots indicated that the assumptions of linearity and approximate normality were reasonably met. There is a statistically significant moderately positive correlation between soil salinity and CA pickle weed biomass(g), meaning that biomass tends to increase as soil salinity increases. (Pearson’s r = 0.53, t(21) = 2.90, p = .009, α = .05)</p>
 </section>
 <section id="e." class="level3">
@@ -234,7 +235,7 @@ sample estimates:
 <p>The analysis shows that pickleweed biomass increases as soil salinity increases, and this relationship is statistically reliable (r = 0.53, p = .009). This means areas of the slough with higher salinity are more likely to support stronger pickleweed growth. For planting decisions, we should prioritize high salinity zones if our goal is to maximize biomass.</p>
 </section>
 <section id="f." class="level3">
-<h3 class="anchored" data-anchor-id="f.">f.&nbsp;</h3>
+<h3 class="anchored" data-anchor-id="f.">f.</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> salinity_mS_cm <span class="sc">+</span> pickleweed,</span>
@@ -348,9 +349,11 @@ sample estimates:
 </section>
 <section id="b.-2" class="level3">
 <h3 class="anchored" data-anchor-id="b.-2">b.</h3>
+<p><img src="images/clipboard-2059503044.jpeg" class="img-fluid"></p>
 </section>
 <section id="c.-1" class="level3">
 <h3 class="anchored" data-anchor-id="c.-1">c.</h3>
+<p><img src="images/clipboard-2121089056.jpeg" class="img-fluid"></p>
 </section>
 <section id="d.-1" class="level3">
 <h3 class="anchored" data-anchor-id="d.-1">d.</h3>
@@ -358,7 +361,7 @@ sample estimates:
 </section>
 <section id="e.-1" class="level3">
 <h3 class="anchored" data-anchor-id="e.-1">e.</h3>
-<p><a href="Boredom%20Scale%20Vs%20Phone%20pickups%20-%20Presentation">My slides</a></p>
+<p><a href="https://www.canva.com/design/DAHDDJ39j6Y/3cjUokWinVR7a40nIoQywg/edit">My slides</a></p>
 </section>
 </section>
 <section id="problem-4" class="level1">
@@ -377,7 +380,7 @@ sample estimates:
 </section>
 <section id="d.-2" class="level3">
 <h3 class="anchored" data-anchor-id="d.-2">d.</h3>
-<p>To make the table easier to read, I would add light shading or simple color gradients to show which correlations are stronger or weaker. This would help readers quickly spot PFAS compounds that behave similarly. I would also add a short note with confidence intervals or sample size information so the reader understands how reliable each value is ( just form looking at the table not the whole study). Another option would be to include a correlation heatmap, with PFAS on both axes and color showing the strength of each correlation, which would make patterns much easier to see at a glance.</p>
+<p>To make the table easier to read, I would add light shading or color gradients to show which correlations are stronger or weaker. This would help readers quickly spot PFAS compounds that behave similarly. I would also add a short note with confidence intervals or sample size information so the reader understands how reliable each value is ( just form looking at the table not the whole study). Another option would be to include a correlation heatmap, with PFAS on both axes and color showing the strength of each correlation, which would make patterns much easier to see at a glance.</p>
 </section>
 </section>
 

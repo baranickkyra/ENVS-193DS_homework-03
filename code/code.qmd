@@ -7,8 +7,6 @@ editor: visual
 
 [My GitHub Repository](https://github.com/baranickkyra/ENVS-193DS_homework-03)
 
-https://baranickkyra.github.io/ENVS-193DS_homework-03/code/code.html
-
 ```{r}
 #| message: false
 #| warning: false

@@ -29,8 +29,7 @@ Two appropriate tests for evaluating the strength of the relationship between so
 ### b.
 
 ```{r}
-library(ggplot2)
-library(dplyr)
+
 
 # Fit the linear model
 lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)

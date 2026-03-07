@@ -24,52 +24,52 @@ Kyra_data <- read.csv(here("data","personal_data.csv"))
 
 ### a.
 
-Two appropriate tests for evaluating the strength of the relationship between soil salinity (mS/cm) and pickleweed biomass (g) are Pearsons correlation and spearmans rank correlation . Pearson’s correlation measures the strength of a linear relationship and assumes normality and equal variance, while Spearman’s correlation uses the ranked values and does not require normality, making it more appropriate for skewed or nonlinear patterns. Both treat salinity and biomass as continuous variables but differ in their assumptions and sensitivity to outliers.
+Two appropriate tests for evaluating the strength of the relationship between soil salinity (mS/cm) and pickleweed biomass (g) are Pearsons correlation and spearmans rank correlation . Pearson’s correlation measures the strength of a linear relationship and assumes normality and equal variance, while Spearman’s correlation quantifies the monotonic relationship between variables, uses the ranked values and does not require normality, making it more appropriate for skewed or nonlinear patterns. Both treat salinity and biomass as continuous variables but differ in their assumptions and sensitivity to outliers.
 
 ### b.
 
 ```{r}
 
 
-# Fit the linear model
-lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)
 
-# Create dataframe of fitted values + confidence intervals
-pred_df <- predict(
-  lm_fit,
-  newdata = data.frame(salinity_mS_cm = salinity$salinity_mS_cm),
-  interval = "confidence"
-) %>%
-  as.data.frame() %>%
-  mutate(salinity_mS_cm = salinity$salinity_mS_cm)
+lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)# Fit the linear model
 
-# Plot
-ggplot() +
-  geom_point(
-    data = salinity,
-    aes(x = salinity_mS_cm, y = pickleweed),
-    color = "darkgreen",
-    size = 3,
-    alpha = 0.7
+
+pred_df <- predict( # creating data frame of model predictions
+  lm_fit, # use the linear model I just created 
+  newdata = data.frame(salinity_mS_cm = salinity$salinity_mS_cm), # use salinity values from original dataset
+  interval = "confidence"  # calaculate CI around predictions
+) |>
+  as.data.frame() |> # convert prediction to a dataframe
+  mutate(salinity_mS_cm = salinity$salinity_mS_cm) # adding salinity values back to the data frame 
+
+
+ggplot() + # Build ggplot
+  geom_point( # making it a scatterplot
+    data = salinity, # specifying the data to plot 
+    aes(x = salinity_mS_cm, y = pickleweed), # mapping salinty to xaxis and pickleweed to yaxis
+    color = "darkgreen", # chnaging default color
+    size = 3, # adjusting size
+    alpha = 0.7 # adjusting opacity
   ) +
   geom_ribbon(
-    data = pred_df,
-    aes(x = salinity_mS_cm, ymin = lwr, ymax = upr),
-    fill = "orange",
-    alpha = 0.25
+    data = pred_df, # Using 
+    aes(x = salinity_mS_cm, ymin = lwr, ymax = upr), # adding the paremeters for confidence interval
+    fill = "orange", # chnaging the color form default
+    alpha = 0.25 # makiing the CI more transparent
   ) +
-  geom_line(
-    data = pred_df,
-    aes(x = salinity_mS_cm, y = fit),
-    color = "orange",
-    linewidth = 1.2
+  geom_line( # adding a trendline
+    data = pred_df, # telling ggplot ot use pred_df data
+    aes(x = salinity_mS_cm, y = fit), # 
+    color = "orange", # changing the color from default
+    linewidth = 1.2 # adjusting the width of lines 
   ) +
-  labs(
+  labs( #labeling the x and y axis 
     x = "Soil salinity (mS/cm)",
     y = "Pickleweed biomass (g)",
-    title = "Relationship between soil salinity and pickleweed biomass"
+    title = "Relationship between soil salinity and pickleweed biomass" # adding and informitive plot titile 
   ) +
-  theme_classic()
+  theme_classic() # changing the thmeme from the ggplot default
 
 
 
@@ -81,11 +81,11 @@ ggplot() +
 ### Checking Assuptions
 
 ```{r}
-# Fit the linear regression model
-lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)
 
-# Produce the four diagnostic plots
-par(mfrow = c(2, 2))   # optional: shows all 4 plots in one window
+lm_fit <- lm(pickleweed ~ salinity_mS_cm, data = salinity)# Fit the linear regression model
+
+
+par(mfrow = c(2, 2))   # Produce the four diagnostic plots
 plot(lm_fit)
 
 ```
@@ -103,10 +103,10 @@ Pearson’s correlation assumes, linearity between salinity and biomass, normali
 ### Running test
 
 ```{r}
-cor.test(
-  ~ salinity_mS_cm + pickleweed,
-  data = salinity,
-  method = "pearson"
+cor.test( # running a two variable corralation test
+  ~ salinity_mS_cm + pickleweed, # specifying variables being tested
+  data = salinity, # using salinity data 
+  method = "pearson" # specifying pearson method
 )
 
 ```
@@ -122,10 +122,10 @@ The analysis shows that pickleweed biomass increases as soil salinity increases,
 ### f.
 
 ```{r}
-cor.test(
-  ~ salinity_mS_cm + pickleweed,
-  data = salinity,
-  method = "spearman"
+cor.test(# running a two variable corralation test
+  ~ salinity_mS_cm + pickleweed, # specifying variables being tested
+  data = salinity, # using salinty data
+  method = "spearman" # using spearman method
 )
 
 ```
@@ -230,6 +230,8 @@ My piece visualizes my daily boredom levels and phone pickups through a timeline
 ### a.
 
 This test uses a Spearmans correlation test to analyze contamination of PFAs in groundwater in Hutuo China. The response variables are the individual PFAS concentrations measured in groundwater samples (PFOA, PFNA, PFHxA, etc). These are the outcomes being compared against each other in the correlation analysis. The predictor variable is the site (1-4) that the sample came from. We are also comparing the concentration of another PFAS compound in the same groundwater samples in the Spearmans correlation.
+
+![](images/clipboard-3308564734.png)
 
 ### b.
 

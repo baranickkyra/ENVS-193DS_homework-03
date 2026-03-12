@@ -75,10 +75,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problem-1" id="toc-problem-1" class="nav-link active" data-scroll-target="#problem-1">Problem 1</a>
+  <ul class="collapse">
+  <li><a href="#a." id="toc-a." class="nav-link" data-scroll-target="#a.">a.</a></li>
+  <li><a href="#b." id="toc-b." class="nav-link" data-scroll-target="#b.">b.</a></li>
+  <li><a href="#c." id="toc-c." class="nav-link" data-scroll-target="#c.">c.</a></li>
+  <li><a href="#checking-assuptions" id="toc-checking-assuptions" class="nav-link" data-scroll-target="#checking-assuptions">Checking Assuptions</a></li>
+  <li><a href="#running-test" id="toc-running-test" class="nav-link" data-scroll-target="#running-test">Running test</a></li>
+  <li><a href="#d." id="toc-d." class="nav-link" data-scroll-target="#d.">d.</a></li>
+  <li><a href="#e." id="toc-e." class="nav-link" data-scroll-target="#e.">e.</a></li>
+  <li><a href="#f." id="toc-f." class="nav-link" data-scroll-target="#f.">f.</a></li>
+  </ul></li>
+  <li><a href="#problem-2" id="toc-problem-2" class="nav-link" data-scroll-target="#problem-2">Problem 2</a>
+  <ul class="collapse">
+  <li><a href="#a.-1" id="toc-a.-1" class="nav-link" data-scroll-target="#a.-1">a.</a></li>
+  <li><a href="#b.-1" id="toc-b.-1" class="nav-link" data-scroll-target="#b.-1">b.</a></li>
+  </ul></li>
+  <li><a href="#problem-3" id="toc-problem-3" class="nav-link" data-scroll-target="#problem-3">Problem 3</a>
+  <ul class="collapse">
+  <li><a href="#a.-2" id="toc-a.-2" class="nav-link" data-scroll-target="#a.-2">a.</a></li>
+  <li><a href="#b.-2" id="toc-b.-2" class="nav-link" data-scroll-target="#b.-2">b.</a></li>
+  <li><a href="#c.-1" id="toc-c.-1" class="nav-link" data-scroll-target="#c.-1">c.</a></li>
+  <li><a href="#d.-1" id="toc-d.-1" class="nav-link" data-scroll-target="#d.-1">d.</a></li>
+  <li><a href="#e.-1" id="toc-e.-1" class="nav-link" data-scroll-target="#e.-1">e.</a></li>
+  </ul></li>
+  <li><a href="#problem-4" id="toc-problem-4" class="nav-link" data-scroll-target="#problem-4">Problem 4</a>
+  <ul class="collapse">
+  <li><a href="#a.-3" id="toc-a.-3" class="nav-link" data-scroll-target="#a.-3">a.</a></li>
+  <li><a href="#b.-3" id="toc-b.-3" class="nav-link" data-scroll-target="#b.-3">b.</a></li>
+  <li><a href="#c.-2" id="toc-c.-2" class="nav-link" data-scroll-target="#c.-2">c.</a></li>
+  <li><a href="#d.-2" id="toc-d.-2" class="nav-link" data-scroll-target="#d.-2">d.</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -195,7 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Normal QQ Plot : This plot checked normality of residuals. Most points fell close to the diagonal line, with only mild deviations at the tails. That pattern indicates that the residuals are reasonably close to normally distributed, which is sufficient for Pearson’s correlation.</p>
 <p>Scale Location Plot : This plot provided another view of homoscedasticity. The red line was about flat, and the spread of points around it did not show a funnel shape. That consistency supports the assumption of equal variance across levels of salinity.</p>
 <p>Residuals vs Leverage : This plot helped identify influential points. No observations were far outside the Cook’s distance , and leverage values were moderate. This indicates that no single point was disproportionately influencing the linear relationship.</p>
-<p>Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals. Overall the assumptions were met.</p>
+<p>Pearson’s correlation assumes, linearity between salinity and biomass, normality of residuals. Overall the assumptions were met. (go back to lec for correlation assumptions)</p>
 </section>
 <section id="running-test" class="level3">
 <h3 class="anchored" data-anchor-id="running-test">Running test</h3>
